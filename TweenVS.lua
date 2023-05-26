@@ -1,10 +1,10 @@
 --Inspired by the GDC talk "Math for Game Programmers: Fast and Funky 1D Nonlinear Transformations" -- https://www.youtube.com/watch?v=mr5xkf6zSzk&ab_channel=GDC
 
 local TweenVS = {
-    _VERSION        =   "1.0.0"
-    _NAME           =   "TweenVS"
-    _DESCRIPTION    =   "VScript Tweening library for the Source2 Game Engine"
-    _LINK           =   "github.com/Angel-foxxo/TweenVS"
+    _VERSION        =   "1.0.0",
+    _NAME           =   "TweenVS",
+    _DESCRIPTION    =   "VScript Tweening library for the Source2 game engine",
+    _LINK           =   "github.com/Angel-foxxo/TweenVS",
     _COPYRIGHT      =   [[
         * Copyright (C) 2023 Angel - All Rights Reserved
         * You may use, distribute and modify this code under the
@@ -493,6 +493,14 @@ function TweenVS.Tween:update()
     --twin chaining is executed here because otherwise we wouldnt get the final start position
     if self._nextTween ~= nil and self._timeElapsed >= self._duration then
 
+        if self._nextTween._property ~= nil then
+            
+            self._nextTween:from(self._nextTween._target, self._nextTween._property)
+
+            if self._nextTween._localVal ~= nil then
+                self._nextTween:toLocal(self._nextTween._localVal, self._nextTween._duration, self._nextTween._localLoop)
+            end
+        end
         self._nextTween:start()
         if self._nextTween._paused then
 
