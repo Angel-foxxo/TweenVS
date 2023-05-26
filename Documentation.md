@@ -1,6 +1,8 @@
 # TweenVs Documentation
 ________________________________
 
+## Tween Functions
+
 ```lua
 :from(target, property = nil)
 ```
@@ -8,11 +10,8 @@ Gets the initial value to tween, `target` can be an entity handle or a numeric v
 if `target` is an entity handle then `property` has to be specified, this dictates what entity property to tween  
 valid properties:  
 ```lua
-TweenVS.EntProps
-{
-    "pos"     -- entity position
-    "ang"     -- entity angles
-}
+"pos"     -- entity position
+"ang"     -- entity angles
 ```
 ________________________________
 
@@ -84,14 +83,11 @@ Will add a callback function `func` to be run based on the `type`
 the functions needs to have the form `function(output)` where `output` is the output value of the tween that will be passed to the function  
 `type` dictates when the callback is ran, valid types are:  
 ```lua
-TweenVS.Callbacks
-{
-    "update"        -- runs the callback function each time the tween updates
-    "finish"        -- runs the callback function when the tween finishes
-    "start"         -- runs the callback function only on the first start of the tween
-    "everyStart"    -- runs the callback function on every other subsequent start, ex: when the tween is looping
-    "stop"          -- runs the callback function when the tween stops
-}
+"update"        -- runs the callback function each time the tween updates
+"finish"        -- runs the callback function when the tween finishes
+"start"         -- runs the callback function only on the first start of thetween
+"everyStart"    -- runs the callback function on every other subsequentstart, ex: when the tween is looping
+"stop"          -- runs the callback function when the tween stops
 ```
 ________________________________
 
@@ -107,3 +103,39 @@ ________________________________
 ```
 if `val` is set to `true` it will invert the tween, however it does this by inverting the `t` progress value itself not the start and end values  
 if `val` is set to `false` it will disable the inversion  
+________________________________
+## Easing functions
+
+The library provides an extensive list of in-build Tweening functions courtesy of https://easings.net/
+
+```lua
+TweenVS.EaseInSine
+TweenVS.EaseOutSine
+TweenVS.EaseInOutSine
+TweenVS.EaseInCubic
+TweenVS.EaseOutCubic
+TweenVS.EaseInOutCubic
+TweenVS.EaseInQuint
+TweenVS.EaseOutQuint
+TweenVS.EaseInOutQuint
+TweenVS.EaseInCircle
+TweenVS.EaseOutCircle
+TweenVS.EaseInOutCircle
+TweenVS.EaseInElastic
+TweenVS.EaseOutElastic
+TweenVS.EaseInOutElastic
+TweenVS.EaseInQuad
+TweenVS.EaseOutQuad
+TweenVS.EaseInQuart
+TweenVS.EaseOutQuart
+TweenVS.EaseInOutQuart
+TweenVS.EaseInExpo
+TweenVS.EaseOutExpo
+TweenVS.EaseInOutExpo
+TweenVS.EaseInBack
+TweenVS.EaseOutBack
+TweenVS.EaseInOutBack
+TweenVS.EaseInBounce
+TweenVS.EaseOutBounce
+TweenVS.EaseInOutBounce
+```

@@ -1,7 +1,10 @@
 # TweenVS
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Angel-foxxo/TweenVS)
 
+
 A simple VScript library for tweening and animating entities and variables.
+
+![Alt Text](showcase.gif)
 
 ## Usage
 Place the `TweenVS.lua` file in your `vscripts` folder and require it at the beginning of your script like this:

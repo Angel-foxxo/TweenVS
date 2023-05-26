@@ -1,7 +1,7 @@
 --Inspired by the GDC talk "Math for Game Programmers: Fast and Funky 1D Nonlinear Transformations" -- https://www.youtube.com/watch?v=mr5xkf6zSzk&ab_channel=GDC
 
 local TweenVS = {
-    _VERSION        =   "1.0.1",
+    _VERSION        =   "1.0.2",
     _NAME           =   "TweenVS",
     _DESCRIPTION    =   "VScript Tweening library for the Source2 game engine",
     _LINK           =   "github.com/Angel-foxxo/TweenVS",
@@ -97,6 +97,9 @@ function TweenVS.Tween:from(target, property)
     elseif property == TweenVS.EntProps.scale then
 
         self._type = TweenVS.EntProps.scale
+    elseif property == TweenVS.EntProps.color then
+
+        self._type = TweenVS.EntProps.color
     end
 
     --is it an entity?
@@ -118,6 +121,8 @@ function TweenVS.Tween:from(target, property)
             self._initVal = target:EyeAngles()
         elseif self._type == TweenVS.EntProps.scale then
             self._initVal = target:GetAbsScale()
+        elseif self._type == TweenVS.EntProps.color then
+            self._initVal = target:GetRenderColor()
         end
 
         self._target = target
@@ -480,6 +485,9 @@ function TweenVS.Tween:update()
         elseif self._type == TweenVS.EntProps.scale then
 
             self._target:SetAbsScale(self._resultVal)
+        elseif self._type == TweenVS.EntProps.color then
+
+            self._target:SetRenderColor(self._resultVal.x, self._resultVal.y, self._resultVal.z)
         end
     --not an entity, perhaps a type?
     elseif TweenVS.FindInArray(TweenVS.ValTypes, TweenVS.type(self._target)) then
@@ -826,7 +834,8 @@ TweenVS.EntProps =
 {
     pos = "pos",
     ang = "ang",
-    scale = "scale"
+    scale = "scale",
+    color = "color"
 }
 
 --------------------
