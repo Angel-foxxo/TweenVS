@@ -87,6 +87,6 @@ TweenVS.Tween()
 :bounce()                       --reverse direction on every loop
 :pause(1)                       --pause for 1 second before starting
 :start()                        --start tweening
-:easing(TweenVS.EaseOutBounce); --use the "EaseInElastic" easing function
+:easing(TweenVS.EaseOutBounce); --use the "EaseOutBounce" easing function
 ```
 See [Documentation.md](Documentation.md) for a list of all functions.
