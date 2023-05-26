@@ -1,7 +1,7 @@
 --Inspired by the GDC talk "Math for Game Programmers: Fast and Funky 1D Nonlinear Transformations" -- https://www.youtube.com/watch?v=mr5xkf6zSzk&ab_channel=GDC
 
 local TweenVS = {
-    _VERSION        =   "1.0.0",
+    _VERSION        =   "1.0.1",
     _NAME           =   "TweenVS",
     _DESCRIPTION    =   "VScript Tweening library for the Source2 game engine",
     _LINK           =   "github.com/Angel-foxxo/TweenVS",
