@@ -1,5 +1,5 @@
 # TweenVS
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Angel-foxxo/TweenVS?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Angel-foxxo/TweenVS?style=flat-square)
 
 
 A simple VScript library for tweening and animating entities and variables.
