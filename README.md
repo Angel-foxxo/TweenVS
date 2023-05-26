@@ -47,7 +47,7 @@ TweenVS.Tween()
 :start()                --start tweening
 :on("update", testFunc) --call the `testFunc` function with the output value
 ```
-The code above can also be written like this, declaring the function in the tween body and putting 1 directly in `.to()` instead of using the variable:
+The code above can also be written like this, declaring the function in the tween body and putting 1 directly in `:from()` instead of using the variable:
 ```lua
 TweenVS.Tween()
 :from(1)
@@ -87,6 +87,6 @@ TweenVS.Tween()
 :bounce()                       --reverse direction on every loop
 :pause(1)                       --pause for 1 second before starting
 :start()                        --start tweening
-:easing(TweenVS.EaseOutBounce); --use the "EaseInElastic" easing functio
+:easing(TweenVS.EaseOutBounce); --use the "EaseInElastic" easing function
 ```
 See [Documentation.md](Documentation.md) for a list of all functions.
