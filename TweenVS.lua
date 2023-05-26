@@ -91,11 +91,12 @@ function TweenVS.Tween:from(target, property)
     if property == TweenVS.EntProps.pos then
 
         self._type = TweenVS.EntProps.pos
-
     elseif property == TweenVS.EntProps.ang then
 
         self._type = TweenVS.EntProps.ang
+    elseif property == TweenVS.EntProps.scale then
 
+        self._type = TweenVS.EntProps.scale
     end
 
     --is it an entity?
@@ -115,6 +116,8 @@ function TweenVS.Tween:from(target, property)
             self._initVal = target:GetOrigin()
         elseif self._type == TweenVS.EntProps.ang then
             self._initVal = target:EyeAngles()
+        elseif self._type == TweenVS.EntProps.scale then
+            self._initVal = target:GetAbsScale()
         end
 
         self._target = target
@@ -471,11 +474,12 @@ function TweenVS.Tween:update()
         if self._type == TweenVS.EntProps.pos then
 
             self._target:SetOrigin(self._resultVal)
-
         elseif self._type == TweenVS.EntProps.ang then
 
             self._target:SetAngles(self._resultVal.x, self._resultVal.y, self._resultVal.z)
+        elseif self._type == TweenVS.EntProps.scale then
 
+            self._target:SetAbsScale(self._resultVal)
         end
     --not an entity, perhaps a type?
     elseif TweenVS.FindInArray(TweenVS.ValTypes, TweenVS.type(self._target)) then
@@ -821,7 +825,8 @@ TweenVS.ValTypes =
 TweenVS.EntProps =
 {
     pos = "pos",
-    ang = "ang"
+    ang = "ang",
+    scale = "scale"
 }
 
 --------------------
