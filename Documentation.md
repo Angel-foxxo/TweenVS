@@ -10,8 +10,8 @@ Gets the initial value to tween, `target` can be an entity handle or a numeric v
 if `target` is an entity handle then `property` has to be specified, this dictates what entity property to tween  
 valid properties:  
 ```lua
-"pos"     -- entity position
-"ang"     -- entity angles
+"pos"   -- entity position
+"ang"   -- entity angles
 ```
 ________________________________
 
@@ -25,9 +25,16 @@ ________________________________
 
 ```lua
 :toLocal(value, duration = 1, localLoop = false)
-```
-The same as `:to()` but takes `value` as relative to the entity  
-`localLoop` will make it so that if the tween is looping, the end value is re-evaluated at the start of each new loop relative to the entity.  
+
+The same as :to() but takes value as relative to the entity.
+localLoop will re-evaluate the end value at the start of each new loop.
+
+Example:
+
+*some tween crap here*:toLocal(Vector(0.0, 0.0, 50.0)) --makes the entity tween 50 units up from its current position
+
+*some tween crap here*:toLocal(Vector(0.0, 0.0, 50.0), true) --the entity's local origin is reevaluated after each loop, making the entity continually move 50 units higher each loop.
+``` 
 ________________________________
 
 ```lua
