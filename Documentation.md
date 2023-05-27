@@ -1,120 +1,198 @@
 # TweenVs Documentation
 ________________________________
 
-## Tween Functions
+### Tween Class Functions
+Note that all the following functions are members of the ``Tween()`` classs and should be called on an instance of the ``Tween()`` class.
+
+[`TweenVS:from(target, property = nil)`](#from)  
+[`TweenVS:to(value, duration = 1)`](#to)    
+[`TweenVS:toLocal(value, duration = 1, localLoop = false)`](#toLocal)  
+[`TweenVS:start()`](#start)  
+[`TweenVS:end()`](#end)  
+[`TweenVS:pause(time = nil)`](#pause)  
+[`TweenVS:unpause()`](#unpause)  
+[`TweenVS:loop(loopCount = nil)`](#loop)  
+[`TweenVS:bounce(val = true)`](#bounce)  
+[`TweenVS:on(type, func)`](#on)  
+[`TweenVS:chain(tween)`](#chain)  
+[`TweenVS:easing(easingFunction = nil)`](#easing)  
+[`TweenVS:invert(val = true)`](#invert)  
+________________________________     
+#### from
+```lua
+from(target, property = nil)
+```
+Set the initial value to tween from.
+##### Parameters:
+``target``  Can be an entity handle or a numeric value. If an entity handle is passed, then ``property`` must be specified.  
+``property``    Which of the entity's keyvalues should be tweened. Only necessary if ``target`` is an entity.  
+
+Available keyvalues to tween are:
 
 ```lua
-:from(target, property = nil)
-```
-Gets the initial value to tween, `target` can be an entity handle or a numeric value  
-if `target` is an entity handle then `property` has to be specified, this dictates what entity property to tween  
-valid properties:  
-```lua
-"pos"   -- entity position
-"ang"   -- entity angles
+"pos",          -- entity origin
+"ang",          -- entity angles
+"mass",         -- entity mass
+"scale",        -- entity scale
+"color",        -- entity rendercolor
+"alpha",        -- entity alpha
+"health",       -- entity health
+"velocity",     -- entity velocity
+"angVelocity"   -- entity angular velocity
 ```
 ________________________________
-
+#### to
 ```lua
-:to(value, duration = 1)
+to(value, duration = 1)
 ```
-Sets the end value of the tween.  
-`value` will set the value the tween will interpolate to, this has to match the value type used in `:from()`   
-`duration` will set the time in seconds in which the tween will go from the initial value to the end value     
+Set the end value to tween towards.
+##### Parameters:
+``value`` The final value of the tween. The library will interpolate from the value specified in ``from()`` to this value. Must match the data type used in ``from()`` !  
+``duration`` The amount of time the tween will last, in seconds. A value of ``1``, with a from value of ``0`` and a ``to()`` value of ``1``, will interpolate from ``0`` to ``1`` in ``1`` second.   
 ________________________________
+#### toLocal
+```lua
+toLocal(value, duration = 1, localLoop = false)
+```
+Behaves the same as ``to()`` but tweened keyvalues are relative to the entity's current keyvalue.
+##### Parameters:
+``value`` The final value of the tween. The library will interpolate from the value specified in ``from()`` to this value. Must match the data type used in ``from()`` !   
+``duration`` The amount of time the tween will last, in seconds. A value of ``1``, with a from value of ``0`` and a ``to()`` value of ``1``, will interpolate from ``0`` to ``1`` in ``1`` second.  
+``localLoop`` A boolean ``true`` or ``false`` flag that specifies whether to use the entity's local keyvalues at the start of each loop. ``false`` means the local ``from()`` value is only calculated at the start of the tween.  
+##### Example:
 
 ```lua
-:toLocal(value, duration = 1, localLoop = false)
+--makes the entity tween 50 units up from its current position over 1 second.
+local myEntity = GetListenServerHost()
+TweenVS.Tween()
+:from(myEntity, "pos")
+:toLocal(Vector(0.0, 0.0, 50.0), 1)
+:start()
 
-The same as :to() but takes value as relative to the entity.
-localLoop will re-evaluate the end value at the start of each new loop.
+--the entity's local origin is reevaluated after each loop, making the entity continually move 50 units higher each second.
+local myEntity = GetListenServerHost()
+TweenVS.Tween()
+:from(myEntity, "pos")
+:toLocal(Vector(0.0, 0.0, 50.0), 1, true)
+:start()
 
-Example:
-
-*some tween crap here*:toLocal(Vector(0.0, 0.0, 50.0)) --makes the entity tween 50 units up from its current position
-
-*some tween crap here*:toLocal(Vector(0.0, 0.0, 50.0), true) --the entity's local origin is reevaluated after each loop, making the entity continually move 50 units higher each loop.
 ``` 
 ________________________________
-
+#### start
 ```lua
-:start()
+start()
 ```
 Starts the tween.
 ________________________________
-
+#### stop
 ```lua
-:stop()
+stop()
 ```
-Stops the tween, this will stop the tween from being updated in any way.
+Stops the tween and removes it from the tween table.
 ________________________________
-
+#### pause
 ```lua
-:pause(time = nil)
+pause(time = nil)
 ```
-Pauses the tween, if `time` in seconds is provided this will act as a delay.
+Pauses the tween.
+##### Parameters:
+``time`` If specified, determines how long the tween should pause for, in seconds. Default is ``nil`` (infinite).
 ________________________________
-
+#### unpause
 ```lua
-:unpause()
+unpause()
 ```
 Unpauses the tween.  
 ________________________________
-
+#### loop
 ```lua
-:loop(loopCount = nil)
+loop(loopCount = nil)
 ```
-Loops the tween, the tween will `start()` itself after it finishes tweening  
-if `loopCount = -1` the tween will loop forever  
+Loops the tween.
+##### Parameters:
+``loopCount`` Specifies how many times the tween should loop. A value of ``-1`` will make the tween loop indefinitely.
 ________________________________
-
+#### bounce
 ```lua
-:bounce(val = true)
+bounce(val = true)
 ```
-If `val` is set to true it will make the tween go backwards, from the end value to the initial value, on each loop  
-if `val` is set to false it will disable bouncing  
-requires `loop()` to be at least `1`
+Creates a bouncing tween effect. Requires ``loopCount`` in ``loop()`` to be greater than 0.
+##### Parameters:
+``val`` A boolean value - ``true`` makes the tween bounce backwards, from the ``to()`` value to the ``from()`` value on each loop. ``false`` Disables bouncing.
 ________________________________
-
+#### on
 ```lua
-:chain(tween)
+on(type, func)
 ```
-Runs the provided tween when the current tween finishes  
-`tween` needs to be another `Tween()` class  
-________________________________
-
-```lua
-:on(type, func)
-```
-Will add a callback function `func` to be run based on the `type`  
-the functions needs to have the form `function(output)` where `output` is the output value of the tween that will be passed to the function  
-`type` dictates when the callback is ran, valid types are:  
+Add a custom callback function to the tween. Functions can have one optional argument that passes in the value of the current tween.
+##### Parameters:
+``type`` The type of callback to use. Available callbacks are:
 ```lua
 "update"        -- runs the callback function each time the tween updates
 "finish"        -- runs the callback function when the tween finishes
-"start"         -- runs the callback function only on the first start of thetween
-"everyStart"    -- runs the callback function on every other subsequentstart, ex: when the tween is looping
+"start"         -- runs the callback function only on the first start of the tween
+"everyStart"    -- runs the callback function on every other subsequent start, ie when the tween is looping
 "stop"          -- runs the callback function when the tween stops
 ```
-________________________________
+``func`` The custom function to run when the callback is called
+ ##### Example:
+ ```lua
+  -- Create a tween that tweens from 1 to 5 in 0.5 seconds and prints out "Done!" when its finished
+myTween = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:on("finish", function()
+    print("Done!")
+end)
+:start()
 
+-- The above code can also be written in this way
+function PrintDone()
+    print("Done!")
+end
+
+myTween = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:on("finish", PrintDone)
+:start()
+ ```
+________________________________
+#### chain
 ```lua
-:easing(easingFunction = nil)
+chain(tween)
 ```
-Sets the easing type of the interpolation, the library includes an extensive collection of easing functions, see: `TweenVS.EasingFunctions`  
-you can also define a custom easing function of the form `function(t)` that returns `t` 
-________________________________
+Allows you to chain multiple tweens together to create complex tweening effects.
+##### Parameters:
+``tween`` The tween to run after the current one. Must be another instance of the ``Tween()`` class. 
+ ##### Example:
+ ```lua
+ -- Create a tween that tweens from 1 to 5 in 0.5 seconds and prints out the value on each update
+ -- do not start it yet
+myTweenOne = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:on("update", function(val)
+    print("Tweened value is: " .. tostring(val))    --print out the tweened value
+end)
 
+-- Create a tween called "myTweenTwo" that moves an entity to world position (64, 64, 0) 
+-- and chain `myTweenOne` to the end of `myTweenTwo`, then begin tweening
+local myEntity = GetListenServerHost()
+myTweenTwo = TweenVS.Tween()
+:from(myEntity, "pos")
+:to(Vector(64, 64, 0), 5)
+:chain(myTweenOne)
+:start()
+ ```
+________________________________
+#### easing
 ```lua
-:invert(val = true)
+easing(easingFunction = nil)
 ```
-if `val` is set to `true` it will invert the tween, however it does this by inverting the `t` progress value itself not the start and end values  
-if `val` is set to `false` it will disable the inversion  
-________________________________
-## Easing functions
-
-The library provides an extensive list of in-build Tweening functions courtesy of https://easings.net/
-
+Set the interpolation type. A custom interpolation function can also be passed in, the function argument must take in at least one value and then return it. (this value would be the current ``t`` value of the interpolation).
+##### Parameters:
+``easingFunction`` The type of interpolation to use. Available easing functions are:
 ```lua
 TweenVS.EaseInSine
 TweenVS.EaseOutSine
@@ -146,3 +224,70 @@ TweenVS.EaseInBounce
 TweenVS.EaseOutBounce
 TweenVS.EaseInOutBounce
 ```
+The website https://easings.net/ has a collection of graphs and animations illustrating the various easing functions.
+ ##### Example:
+ ```lua
+ -- Create a tween that tweens from 1 to 5 in 0.5 seconds, using a Cubic formula, then begin tweening
+myTween = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:easing(TweenVS.EaseInCubic)
+:on("update", function(val)
+    print("Tweened value is: " .. tostring(val))    --print out the tweened value
+end)
+:start()
+
+
+-- Custom functions can also be passed in, for example:
+function EaseInRidiculous(t)
+    return t * t * t * t * t * t * t * t * t
+end
+
+myTween = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:easing(EaseInRidiculous)
+:on("update", function(val)
+    print("Tweened value is: " .. tostring(val))    --print out the tweened value
+end)
+:start()
+
+-- The previous code could also be written as
+myTween = TweenVS.Tween()
+:from(1)
+:to(5, 0.5)
+:easing(function (t)
+    return t * t * t * t * t * t * t * t * t
+end)
+:on("update", function(val)
+    print("Tweened value is: " .. tostring(val))    --print out the tweened value
+end)
+:start()
+ ```
+________________________________
+#### invert
+```lua
+invert(val = true)
+```
+Invert the current ``t`` value of the interpolation.
+##### Parameters:
+``val`` A boolean value specifying whether to invert the tween. ``true`` Enables inversion, ``false`` disables inversion.
+________________________________
+## TweenVS General Functions
+The following functions are part of the TweenVS table
+________________________________
+[`TweenVS:PurgeTweens()`](#from)  
+[`TweenVS:type(obj)`](#from)
+________________________________
+#### PurgeTweens
+```lua
+PurgeTweens()
+```
+Wipes the current tween table, destroying all created tweens.
+________________________________
+#### type
+```lua
+type(obj)
+```
+Custom type() function, returns the data type of `obj` including the Tween(), Vector() and QAngle() classes, which the normal type() function misses.
+________________________________
