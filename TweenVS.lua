@@ -1,7 +1,7 @@
 --Inspired by the GDC talk "Math for Game Programmers: Fast and Funky 1D Nonlinear Transformations" -- https://www.youtube.com/watch?v=mr5xkf6zSzk&ab_channel=GDC
 
 local TweenVS = {
-    _VERSION        =   "1.0.2",
+    _VERSION        =   "1.0.3",
     _NAME           =   "TweenVS",
     _DESCRIPTION    =   "VScript Tweening library for the Source2 game engine",
     _LINK           =   "github.com/Angel-foxxo/TweenVS",
@@ -87,21 +87,6 @@ end
 function TweenVS.Tween:from(target, property)
     property = property or nil
 
-    --set what property we are modifying
-    if property == TweenVS.EntProps.pos then
-
-        self._type = TweenVS.EntProps.pos
-    elseif property == TweenVS.EntProps.ang then
-
-        self._type = TweenVS.EntProps.ang
-    elseif property == TweenVS.EntProps.scale then
-
-        self._type = TweenVS.EntProps.scale
-    elseif property == TweenVS.EntProps.color then
-
-        self._type = TweenVS.EntProps.color
-    end
-
     --is it an entity?
     if TweenVS.instanceof(target, "CBaseEntity") then
 
@@ -109,21 +94,52 @@ function TweenVS.Tween:from(target, property)
             error("TweenVS: from() target is an entity but no entity propery is specified!", 2)
         end
 
-        --check if propery is valid
-        if TweenVS.EntProps[property] == nil then
+        --set what property we are modifying
+        if TweenVS.EntProps[property] ~= nil then
+            self._type = property
+        else
             error("TweenVS: from() target is an entity but the entity property is invalid!", 2)
         end
 
         --set the property
-        if self._type == TweenVS.EntProps.pos then
-            self._initVal = target:GetOrigin()
-        elseif self._type == TweenVS.EntProps.ang then
-            self._initVal = target:EyeAngles()
-        elseif self._type == TweenVS.EntProps.scale then
-            self._initVal = target:GetAbsScale()
-        elseif self._type == TweenVS.EntProps.color then
-            self._initVal = target:GetRenderColor()
-        end
+        TweenVS.Switch(self._type, {
+
+            [TweenVS.EntProps.pos] = function()
+                self._initVal = target:GetOrigin()
+            end,
+            
+            [TweenVS.EntProps.ang] = function()
+                self._initVal = target:EyeAngles()
+            end,
+            
+            [TweenVS.EntProps.scale] = function()
+                self._initVal = target:GetAbsScale()
+            end,
+            
+            [TweenVS.EntProps.color] = function()
+                self._initVal = target:GetRenderColor()
+            end,
+
+            [TweenVS.EntProps.alpha] = function()
+                self._initVal = target:GetRenderAlpha()
+            end,
+
+            [TweenVS.EntProps.mass] = function()
+                self._initVal = target:GetMass()
+            end,
+
+            [TweenVS.EntProps.health] = function()
+                self._initVal = target:GetHealth()
+            end,
+
+            [TweenVS.EntProps.velocity] = function()
+                self._initVal = GetPhysVelocity(target)
+            end,
+
+            [TweenVS.EntProps.angVelocity] = function()
+                self._initVal = GetPhysAngularVelocity(target)
+            end,
+        })
 
         self._target = target
         self._property = property
@@ -476,19 +492,45 @@ function TweenVS.Tween:update()
     if TweenVS.instanceof(self._target, "CBaseEntity") then
 
         --set entity property based on the type
-        if self._type == TweenVS.EntProps.pos then
+        TweenVS.Switch(self._type, {
 
-            self._target:SetOrigin(self._resultVal)
-        elseif self._type == TweenVS.EntProps.ang then
+            [TweenVS.EntProps.pos] = function()
+                self._target:SetOrigin(self._resultVal)
+            end,
+    
+            [TweenVS.EntProps.ang] = function()
+                self._target:SetAngles(self._resultVal.x, self._resultVal.y, self._resultVal.z)
+            end,
+    
+            [TweenVS.EntProps.scale] = function()
+                self._target:SetAbsScale(self._resultVal)
+            end,
+    
+            [TweenVS.EntProps.color] = function()
+                self._target:SetRenderColor(self._resultVal.x, self._resultVal.y, self._resultVal.z)
+            end,
 
-            self._target:SetAngles(self._resultVal.x, self._resultVal.y, self._resultVal.z)
-        elseif self._type == TweenVS.EntProps.scale then
+            [TweenVS.EntProps.alpha] = function()
+                self._target:SetRenderAlpha(self._resultVal)
+            end,
 
-            self._target:SetAbsScale(self._resultVal)
-        elseif self._type == TweenVS.EntProps.color then
+            [TweenVS.EntProps.mass] = function()
+                self._target:SetMass(self._resultVal)
+            end,
 
-            self._target:SetRenderColor(self._resultVal.x, self._resultVal.y, self._resultVal.z)
-        end
+            [TweenVS.EntProps.health] = function()
+                self._target:SetHealth(self._resultVal)
+            end,
+
+            [TweenVS.EntProps.velocity] = function()
+                self._target:SetVelocity(self._resultVal)
+            end,
+
+            [TweenVS.EntProps.angVelocity] = function()
+                SetPhysAngularVelocity(self._target, self._resultVal)
+            end,
+        })
+
     --not an entity, perhaps a type?
     elseif TweenVS.FindInArray(TweenVS.ValTypes, TweenVS.type(self._target)) then
 
@@ -508,7 +550,7 @@ function TweenVS.Tween:update()
         if self._nextTween._property ~= nil then
             
             self._nextTween:from(self._nextTween._target, self._nextTween._property)
-
+            
             if self._nextTween._localVal ~= nil then
                 self._nextTween:toLocal(self._nextTween._localVal, self._nextTween._duration, self._nextTween._localLoop)
             end
@@ -834,8 +876,13 @@ TweenVS.EntProps =
 {
     pos = "pos",
     ang = "ang",
+    mass = "mass",
     scale = "scale",
-    color = "color"
+    color = "color",
+    alpha = "alpha",
+    health = "health",
+    velocity = "velocity",
+    angVelocity = "angVelocity"
 }
 
 --------------------
