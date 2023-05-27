@@ -1,4 +1,4 @@
-# TweenVs Documentation
+# TweenVS Documentation
 ________________________________
 
 ### Tween Class Functions
